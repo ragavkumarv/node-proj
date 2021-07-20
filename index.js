@@ -65,9 +65,25 @@ const users = [
   },
 ];
 
-console.log(users.map((user) => user.name));
+const args = process.argv;
+
+const keyName = args[2];
+
+console.log(users.map((user) => user[keyName]));
+
+// const idx = 2;
+// num[idx]
 
 // console.log(document, window);
 // console.log(globalThis);
 
-console.log(process.argv);
+console.log(args);
+console.log("first argument ", args[0]);
+console.log("second argument ", args[1]);
+console.log("third argument ", args[2]);
+
+// dot syntax
+// user.name
+
+// box syntax
+// user['name']
