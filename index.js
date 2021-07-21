@@ -9,41 +9,6 @@ dotenv.config();
 const app = express();
 const PORT = process.PORT || 5000;
 
-// const poll = [
-//   {
-//     id: "4",
-//     company: "Oneplus",
-//     color: "red",
-//     content: "China based company",
-//   },
-//   {
-//     id: "2",
-//     company: "Samsung",
-//     color: "skyblue",
-//     content: "Korean based company!",
-//   },
-
-//   {
-//     id: "5",
-//     company: "Moto",
-//     color: "#000080",
-//     content: "US based company",
-//   },
-//   {
-//     color: "pink",
-//     content: "India Based Company",
-//     company: "oppo",
-//     id: "6",
-//   },
-
-//   {
-//     id: "3",
-//     company: "MI",
-//     color: "orange",
-//     content: "China based company",
-//   },
-// ];
-
 async function createConnection() {
   const MONGO_URL = process.MONGO_URI || process.env.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
