@@ -1,4 +1,5 @@
 const express = require("express");
+const { MongoClient } = require("mongodb");
 const app = express();
 const PORT = 5000;
 
@@ -36,6 +37,30 @@ const poll = [
     content: "China based company",
   },
 ];
+
+async function createConnection() {
+  const MONGO_URL =
+    "mongodb+srv://ragavkumarv:<pass>@cluster0.yn2hm.mongodb.net/contestants?retryWrites=true&w=majority";
+
+  const client = new MongoClient(MONGO_URL);
+
+  try {
+    await client.connect();
+
+    const result = await client
+      .db("contestants")
+      .collection("poll")
+      .insertMany(poll);
+
+    console.log("Inserted successfully", result);
+
+    console.log("Succesfully connected");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+createConnection();
 
 app.get("/", (request, response) => {
   response.send("Welcome to my node app");
