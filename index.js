@@ -9,6 +9,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
+// middleware
+app.use(express.json());
+
 async function createConnection() {
   const MONGO_URL = process.env.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
@@ -46,6 +49,7 @@ async function insertPoll(client, poll) {
     .collection("poll")
     .insertMany(poll);
   console.log("Inserted successfully", result);
+  return result;
 }
 
 createConnection();
@@ -93,9 +97,9 @@ app.get("/poll/content/:content", async (request, response) => {
   response.send(contestant);
 });
 
-app.get("/poll", async (request, response) => {
+app.post("/poll", async (request, response) => {
   const { body } = request;
-
+  console.log(body);
   // const contestant = poll.filter((data) => data.id === id);
   // console.log(id, contestant);
   const client = await createConnection();
