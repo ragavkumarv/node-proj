@@ -1,5 +1,7 @@
-const express = require("express");
-const { MongoClient } = require("mongodb");
+import express from "express";
+// const express = require("express");
+import { MongoClient } from "mongodb";
+// const { MongoClient } = require("mongodb");
 const app = express();
 const PORT = 5000;
 
@@ -60,6 +62,16 @@ async function getPollById(client, id) {
   return result;
 }
 
+async function getPolls(client, filter) {
+  const result = await client
+    .db("contestants")
+    .collection("poll")
+    .find(filter)
+    .toArray();
+  console.log("Succesfully connected", result);
+  return result;
+}
+
 async function insertPoll(client, poll) {
   const result = await client
     .db("contestants")
@@ -74,8 +86,19 @@ app.get("/", (request, response) => {
   response.send("Welcome to my node app");
 });
 
-app.get("/poll", (request, response) => {
-  response.send(poll);
+app.get("/poll", async (request, response) => {
+  const client = await createConnection();
+  const contestants = await getPolls(client, {});
+  response.send(contestants);
+});
+
+// "/poll/name/Samsung" - search by name
+
+app.get("/poll/name/:companyname", async (request, response) => {
+  const companyname = request.params.companyname;
+  const client = await createConnection();
+  const contestants = await getPolls(client, { company: companyname });
+  response.send(contestants);
 });
 
 app.get("/poll/:id", async (request, response) => {
@@ -88,6 +111,8 @@ app.get("/poll/:id", async (request, response) => {
 
   response.send(contestant);
 });
+
+// "/poll/content/China" - search by content
 
 app.listen(PORT, () => console.log("The server is started in ", PORT));
 
