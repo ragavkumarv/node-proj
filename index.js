@@ -1,9 +1,13 @@
+// const { MongoClient } = require("mongodb");
+import dotenv from "dotenv";
 import express from "express";
 // const express = require("express");
 import { MongoClient } from "mongodb";
-// const { MongoClient } = require("mongodb");
+
+dotenv.config();
+
 const app = express();
-const PORT = 5000 || process.PORT;
+const PORT = process.PORT || 5000;
 
 // const poll = [
 //   {
@@ -41,7 +45,7 @@ const PORT = 5000 || process.PORT;
 // ];
 
 async function createConnection() {
-  const MONGO_URL = process.MONGO_URI;
+  const MONGO_URL = process.MONGO_URI || process.env.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
   try {
     await client.connect();
@@ -120,6 +124,17 @@ app.get("/poll/content/:content", async (request, response) => {
   const contestant = await getPolls(client, {
     content: { $regex: new RegExp(content, "i") },
   });
+
+  response.send(contestant);
+});
+
+app.get("/poll", async (request, response) => {
+  const { body } = request;
+
+  // const contestant = poll.filter((data) => data.id === id);
+  // console.log(id, contestant);
+  const client = await createConnection();
+  const contestant = await insertPoll(client, body);
 
   response.send(contestant);
 });
