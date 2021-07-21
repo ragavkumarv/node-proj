@@ -7,10 +7,10 @@ import { MongoClient } from "mongodb";
 dotenv.config();
 
 const app = express();
-const PORT = process.PORT || 5000;
+const PORT = process.env.PORT;
 
 async function createConnection() {
-  const MONGO_URL = process.MONGO_URI || process.env.MONGO_URI;
+  const MONGO_URL = process.env.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
   try {
     await client.connect();
