@@ -25,8 +25,8 @@ async function getPollById(client, id) {
   const result = await client
     .db("contestants")
     .collection("poll")
-    .findOne({ id: id });
-  console.log("Succesfully connected", result);
+    .findOne({ id: +id });
+  console.log("Succesfully local connected", result);
   return result;
 }
 
