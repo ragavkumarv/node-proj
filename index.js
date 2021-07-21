@@ -4,23 +4,18 @@ const PORT = 5000;
 
 const poll = [
   {
-    id: "2",
-    company: "Samsung",
-    color: "skyblue",
-    content: "Korean based company!",
-  },
-  {
-    id: "3",
-    company: "MI",
-    color: "orange",
-    content: "China based company",
-  },
-  {
     id: "4",
     company: "Oneplus",
     color: "red",
     content: "China based company",
   },
+  {
+    id: "2",
+    company: "Samsung",
+    color: "skyblue",
+    content: "Korean based company!",
+  },
+
   {
     id: "5",
     company: "Moto",
@@ -33,10 +28,17 @@ const poll = [
     company: "oppo",
     id: "6",
   },
+
+  {
+    id: "3",
+    company: "MI",
+    color: "orange",
+    content: "China based company",
+  },
 ];
 
 app.get("/", (request, response) => {
-  response.send("Welcome to my node app!!!");
+  response.send("Welcome to my node app");
 });
 
 app.get("/poll", (request, response) => {
@@ -45,8 +47,10 @@ app.get("/poll", (request, response) => {
 
 app.get("/poll/:id", (request, response) => {
   const id = request.params.id;
-  console.log(id);
-  response.send(id);
+
+  const contestant = poll.filter((data) => data.id === id);
+  console.log(id, contestant);
+  response.send(contestant);
 });
 
 app.listen(PORT, () => console.log("The server is started in ", PORT));
