@@ -3,7 +3,7 @@ import express from "express";
 import { MongoClient } from "mongodb";
 // const { MongoClient } = require("mongodb");
 const app = express();
-const PORT = 5000;
+const PORT = 5000 || process.PORT;
 
 // const poll = [
 //   {
@@ -41,8 +41,7 @@ const PORT = 5000;
 // ];
 
 async function createConnection() {
-  const MONGO_URL =
-    "mongodb+srv://ragavkumarv:pass@cluster0.yn2hm.mongodb.net/contestants?retryWrites=true&w=majority";
+  const MONGO_URL = process.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
   try {
     await client.connect();
@@ -108,6 +107,19 @@ app.get("/poll/:id", async (request, response) => {
   // console.log(id, contestant);
   const client = await createConnection();
   const contestant = await getPollById(client, id);
+
+  response.send(contestant);
+});
+
+app.get("/poll/content/:content", async (request, response) => {
+  const content = request.params.content;
+
+  // const contestant = poll.filter((data) => data.id === id);
+  // console.log(id, contestant);
+  const client = await createConnection();
+  const contestant = await getPolls(client, {
+    content: { $regex: new RegExp(content, "i") },
+  });
 
   response.send(contestant);
 });
