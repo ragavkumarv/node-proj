@@ -1,48 +1,15 @@
+import dotenv from "dotenv";
 import express from "express";
-// const express = require("express");
 import { MongoClient } from "mongodb";
-// const { MongoClient } = require("mongodb");
+
+dotenv.config();
+//loaded in process.env
+
 const app = express();
-const PORT = 5000;
-
-// const poll = [
-//   {
-//     id: "4",
-//     company: "Oneplus",
-//     color: "red",
-//     content: "China based company",
-//   },
-//   {
-//     id: "2",
-//     company: "Samsung",
-//     color: "skyblue",
-//     content: "Korean based company!",
-//   },
-
-//   {
-//     id: "5",
-//     company: "Moto",
-//     color: "#000080",
-//     content: "US based company",
-//   },
-//   {
-//     color: "pink",
-//     content: "India Based Company",
-//     company: "oppo",
-//     id: "6",
-//   },
-
-//   {
-//     id: "3",
-//     company: "MI",
-//     color: "orange",
-//     content: "China based company",
-//   },
-// ];
+const PORT = process.env.PORT;
 
 async function createConnection() {
-  const MONGO_URL =
-    "mongodb+srv://ragavkumarv:pass@cluster0.yn2hm.mongodb.net/contestants?retryWrites=true&w=majority";
+  const MONGO_URL = process.env.MONGO_URI;
   const client = new MongoClient(MONGO_URL);
   try {
     await client.connect();
@@ -68,6 +35,8 @@ async function getPolls(client, filter) {
     .collection("poll")
     .find(filter)
     .toArray();
+
+  // db.poll.find({color: 'green'})
   console.log("Succesfully connected", result);
   return result;
 }
@@ -112,6 +81,16 @@ app.get("/poll/:id", async (request, response) => {
   response.send(contestant);
 });
 
-// "/poll/content/China" - search by content
+// "/poll/content/China" - search by content - regex
+app.get("/poll/content/:search", async (request, response) => {
+  const search = request.params.search;
+  const client = await createConnection();
+  const contestants = await getPolls(client, {
+    content: { $regex: search, $options: "i" },
+  });
+  response.send(contestants);
+});
+
+// i - Case insensitive - to match uppercase& lowercase
 
 app.listen(PORT, () => console.log("The server is started in ", PORT));
