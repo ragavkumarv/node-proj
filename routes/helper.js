@@ -23,3 +23,12 @@ export async function insertPoll(client, poll) {
   console.log("Inserted successfully", result);
   return result;
 }
+
+export async function deletePollById(client, id) {
+  const result = await client
+    .db("contestants")
+    .collection("poll")
+    .deleteOne({ id: +id });
+  console.log("Deleted successfully", result);
+  return result;
+}
