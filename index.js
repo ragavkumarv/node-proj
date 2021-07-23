@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import express from "express";
 import { MongoClient } from "mongodb";
 import { pollRouter } from "./routes/poll.js";
+import { userRouter } from "./routes/user.js";
 
 dotenv.config();
 //loaded in process.env
@@ -31,16 +31,11 @@ app.get("/", (request, response) => {
 });
 
 app.use("/poll", pollRouter);
+// /user/signup
+app.use("/user", userRouter);
+
 // '/poll/:id'
 // '/poll/name/:companyname'
 // post '/poll'
 
 app.listen(PORT, () => console.log("The server is started in ", PORT));
-
-async function genPassword(password) {
-  const salt = await bcrypt.genSalt(10); // More rounds secure - dowside it will time - user
-  const hashedPassword = await bcrypt.hash(password, salt);
-  console.log(hashedPassword);
-}
-
-genPassword("password@123");

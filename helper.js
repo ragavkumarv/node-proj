@@ -33,3 +33,12 @@ export async function insertPoll(client, polls) {
   console.log("Inserted successfully", result);
   return result;
 }
+
+export async function insertUser(client, user) {
+  const result = await client
+    .db("contestants")
+    .collection("user")
+    .insertOne(user);
+  console.log("Inserted successfully", result);
+  return result;
+}
