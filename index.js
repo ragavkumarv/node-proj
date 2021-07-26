@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { MongoClient } from "mongodb";
@@ -13,6 +14,7 @@ const PORT = process.env.PORT;
 // middleware - transaltor
 // request -> parse json (body, post, put, patch) -> request.body
 app.use(express.json());
+app.use(cors());
 
 export async function createConnection() {
   const MONGO_URL = process.env.MONGO_URI;
